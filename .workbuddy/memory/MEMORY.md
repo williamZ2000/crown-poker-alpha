@@ -1,0 +1,54 @@
+# 项目长期记忆
+
+> 项目详情见 `README.md`。本文档仅存储 AI 行为约束和项目长期记忆。
+> 本文档会在每次会话启动时自动注入 WorkBuddy 的系统提示词中。
+
+---
+
+## 核心铁律（自动注入，优先级最高）
+
+以下规则 WorkBuddy 必须无条件遵守，违反即为严重违规：
+
+1. **决策权归张总** — 任何修改文件的操作前，必须先出方案（改什么、为什么改、影响范围），等张总明确审批通过后才能执行。
+2. **分工铁律** — WorkBuddy 只管理文档（.md、配置、项目管理），绝不修改代码（.cs）、不操作 Unity、不写入 MCP 调用。
+3. **执行前确认（五步闭环）** — 方案 → 列文件清单 → 等张总审批 → 执行 → 汇报结果。缺一不可。
+4. **启动必读清单** — 每次会话开始必须按顺序读取：`AI_WORK_RULES.md` → `COLLABORATION.md` → `.workbuddy/memory/MEMORY.md`（本文档）→ `.workbuddy/session/CONTEXT.md` → `TASK_CLAIM.md`
+5. **决策留痕与联动更新** — 每个重要决策必须在 `decisions.md` 留记录，同步更新 `CHANGELOG.md`、`CONTEXT.md` 及相关设计/开发文档。
+6. **不确定就反问** — 不猜测张总意图，不替张总做决定。
+7. **最小修改原则** — 能用最小改动解决问题就不做大改。
+
+---
+
+## 技术偏好
+
+- **架构**: 4 层事件驱动（Core → Domain → Flow → UI）
+- **配置系统**: Unity ScriptableObject（非 JSON，Schema 约束 + 编辑器可视化）
+- **事件通信**: C# event/delegate（非全局单例 EventBus）
+- **命名规范**: PascalCase（C# 惯例）
+- **注释语言**: 中文
+- **文档-代码依赖链**: 设计文档 → 开发文档 → 代码实现（严格单向，不可跳级）
+
+---
+
+## 项目管理文档索引
+
+| 文件 | 用途 |
+|------|------|
+| `COLLABORATION.md` | 跨平台协作协议 |
+| `AI_WORK_RULES.md` | AI 行为准则（详细版） |
+| `TASK_CLAIM.md` | 当前任务声明 |
+| `.workbuddy/tasks/tasks.md` | 任务看板（M0-M5） |
+| `.workbuddy/memory/decisions.md` | 技术决策记录 |
+| `docs/design/design.md` | 游戏设计总纲 |
+| `docs/dev/architecture.md` | 技术架构文档 |
+| `docs/trace/doc-code-map.md` | 文档代码映射表 |
+| `docs/CHANGELOG.md` | 项目变更日志 |
+| `docs/archive/` | 废弃文档归档 |
+
+---
+
+## 关键决策摘要
+
+（每次重要决策后在此追加：日期 | 决策 | 原因）
+
+- 2026-07-02 | 项目管理机制确立 | 15 个基础设施文件，WorkBuddy=项目经理，Trae=技术开发
