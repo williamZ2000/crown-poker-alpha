@@ -2,10 +2,10 @@
 
 ## 角色分工
 
-| 角色 | 技能 | 禁止 |
+| 角色 | 职责 | 禁止 |
 |------|------|------|
-| 张总 | 决策者、审核者 | — |
-| WorkBuddy | 项目管理、文档编写、方案设计、进度追踪 | 不写 .cs 代码、不操作 Unity、不调用 MCP |
+| 张总 | 决策者、审核者、两个平台的唯一连接点 | — |
+| WorkBuddy | 项目管理、文档编写、方案设计、进度追踪、**代码审核与验收** | 不写 .cs 代码、不操作 Unity、不调用 MCP |
 | Trae | C# 代码编写、Unity 场景编辑、MCP 实施 | 不修改设计文档、不编写项目管理文件、不做方案决策 |
 
 ## 会话启动协议（每次启动必须执行）
@@ -18,14 +18,36 @@
 3. 开始工作
 ```
 
-## 会话结束协议（每次结束前必须执行）
+## 任务完成协议（操作即更新）
+
+AI 不会主动感知"会话结束"，因此不需要依赖会话结束来更新状态。改为即时更新：
+
+- **WorkBuddy**：每完成一个操作后，立即更新相关文档（TASK_CLAIM.md、CONTEXT.md、CHANGELOG.md 等）
+- **Trae**：每次编码任务完成后，立即 commit（带任务 ID），并主动提醒张总审核
+- **WorkBuddy 启动时**：自动检查 Git log，与 tasks.md 比对，发现已完成但未审核的 [Trae] commit 时提醒张总
+
+## 状态同步机制
+
+Trae 和 WorkBuddy 之间没有直接通信通道，张总是唯一连接点。
 
 ```
-1. 更新 TASK_CLAIM.md（释放已完成的任务）
-2. git add + git commit（符合提交规范）
-3. 更新 .workbuddy/session/CONTEXT.md
-4. 如有可能：git push
+Trae 完成编码 → commit [Trae] feat: ... (Mx-xx) → 提醒张总
+    ↓
+张总打开 WorkBuddy → 「审核 Mx-xx」
+    ↓
+WorkBuddy 执行审核 → 更新 tasks.md 状态
+
+兜底：下次 WB 启动时自动扫描 Git log，发现遗漏提醒张总
 ```
+
+## 代码审核流程
+
+1. 张总通知 WorkBuddy 审核指定任务
+2. WorkBuddy 读取 Git log 找到对应 [Trae] commit
+3. WorkBuddy 读取代码，对照开发文档逐项检查
+4. WorkBuddy 产出审核报告：
+   - 通过 → 更新 `tasks.md`（状态→已完成）、`doc-code-map.md`、`decisions.md`
+   - 不通过 → 列出问题清单，`tasks.md` 保持「待审核」，等 Trae 修复后重新审核
 
 ## 冲突避免
 
