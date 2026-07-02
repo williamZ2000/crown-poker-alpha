@@ -22,7 +22,7 @@
 | ID | 任务 | 状态 | 平台 | 预计文件 | 备注 |
 |----|------|------|------|----------|------|
 | M0-01 | 项目管理基础设施搭建 | 已完成 | WB | 规则文件 + 文档体系 | 6 次 commit，16 个文件 |
-| M0-02 | MCP 配置 + Unity 项目搭建 | 进行中 | Trae | Unity 项目 + MCP 连接 | 下一步待讨论方案 |
+| M0-02 | MCP 配置 + Unity 项目搭建 | 已完成 | Trae | Unity 项目 + MCP 连接 | ✅ MCP 三端联通验证通过 |
 | M0-03 | 游戏设计文档重写 | 待开始 | WB | docs/design/design.md | 参考 archive/design-v1-godot.md |
 | M0-04 | 技术架构文档重写 | 待开始 | WB | docs/dev/architecture.md | 参考 archive/architecture-v1-godot.md |
 
