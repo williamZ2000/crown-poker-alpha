@@ -1,6 +1,6 @@
 # 任务看板
 
-最后更新：2026-07-02 18:05
+最后更新：2026-07-02 19:06
 
 ## 任务状态说明
 
@@ -15,21 +15,21 @@
 
 ---
 
-## 里程碑 M0: 项目初始化（进行中）
+## 里程碑 M0: 项目初始化（已完成）
 
 目标：项目管理机制搭建 + 设计文档迁移 + 技术架构确立
 
 | ID | 任务 | 状态 | 平台 | 预计文件 | Commit | 备注 |
 |----|------|------|------|----------|--------|------|
-| M0-01 | 创建项目管理基础设施 | 进行中 | WB | 15 个文档/配置文件 | — | 当前任务 |
-| M0-02 | 迁移设计文档 | 待开始 | WB | docs/design/design.md | — | 从 c&pv-1 迁移 |
-| M0-03 | 编写 Unity 版技术架构 | 待开始 | WB | docs/dev/architecture.md | — | 参考旧项目 |
-| M0-04 | Git 初始化 | 待开始 | Manual | — | — | git init + 首次提交 |
-| M0-05 | 创建 Unity 项目 | 待开始 | Trae | Unity 项目文件 | — | Unity 2022 Hub |
+| M0-01 | 创建项目管理基础设施 | 已完成 | WB | 15 个文档/配置文件 | c191e38 | 包含 .gitignore, README, COLLABORATION, MEMORY, tasks 等 |
+| M0-02 | 迁移设计文档 | 已完成 | WB | docs/design/design.md | c23d5e3 | 从 c&pv-1 迁移并改写 |
+| M0-03 | 编写 Unity 版技术架构 | 已完成 | WB | docs/dev/architecture.md | c23d5e3 | 4 层事件驱动架构 |
+| M0-04 | Git 初始化 | 已完成 | Manual | .git/ | c23d5e3 | git init + 首次提交 + 5 次 commit |
+| M0-05 | 创建 Unity 项目 | 待开始 | Trae | Unity 项目文件 | — | M1 阶段由 Trae 执行 |
 
 ---
 
-## 里程碑 M1: 核心系统
+## 里程碑 M1: 核心系统（进行中）
 
 目标：Card 模型 + 事件系统 + 配置系统 + PlayerState
 

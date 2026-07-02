@@ -26,3 +26,47 @@
 - 确立了审批、联动更新、Git 规范等工作流
 
 **关联文件**: 本项目的所有文件
+
+---
+
+## #D02 — 2026-07-02: 角色分工细化与审核机制
+
+**背景**: 原方案中 WorkBuddy 仅负责文档管理，缺少代码验收环节。且"会话结束协议"依赖 AI 感知会话结束，这是伪需求。
+
+**决策**:
+1. WorkBuddy 新增代码审核/验收职责（读代码、对照开发文档、出审核报告）
+2. 取消所有"会话结束"依赖，改为"操作即更新" + "启动扫描兜底"
+3. Trae 完成编码后必须主动提醒张总通知 WB 审核
+4. Trae 的 Git commit message 任务 ID 为必填项
+
+**原因**:
+1. 需要代码质量把关，但不能让 Trae 自审自验
+2. AI 无法感知会话结束，硬依赖会导致状态遗漏
+3. 张总是两个平台的唯一连接点
+
+**影响**:
+- 更新了 MEMORY.md 铁律、AI_WORK_RULES.md、COLLABORATION.md
+- 建立了审核流程：Trae commit → 张总通知 → WB 审核 → 更新 tasks.md
+- 兜底：WB 每次启动自动扫描 Git log 发现未审核的 commit
+
+**关联文件**: MEMORY.md, AI_WORK_RULES.md, COLLABORATION.md, tasks.md
+
+---
+
+## #D03 — 2026-07-02: Trae 自动注入规则配置
+
+**背景**: Trae 需要每次会话自动加载项目规则，不能仅依赖手动读取。
+
+**决策**: 在 `.trae/rules/ai-project-rules.md` 创建 Always Apply 规则，内容与 MEMORY.md 核心铁律对齐但面向 Trae 角色重写。
+
+**原因**:
+1. Trae 支持 Always Apply 机制，规则随每次对话自动注入
+2. 手动读取容易遗漏，自动注入确保核心铁律永不丢失
+3. 内容精简为 6 条铁律 + 启动必读 + 代码规范，适合作为提示词前缀
+
+**影响**:
+- 创建了 `.trae/rules/ai-project-rules.md`
+- 张总在 Trae 端手动配置此规则为 Always Apply
+- 未来规则变更时需同步更新此文件
+
+**关联文件**: .trae/rules/ai-project-rules.md, MEMORY.md
