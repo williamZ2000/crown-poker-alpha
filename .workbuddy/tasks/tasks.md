@@ -1,6 +1,6 @@
 # 任务看板
 
-最后更新：2026-07-02 19:20
+最后更新：2026-07-03 16:50
 
 ## 任务状态说明
 
@@ -23,7 +23,7 @@
 |----|------|------|------|----------|------|
 | M0-01 | 项目管理基础设施搭建 | 已完成 | WB | 规则文件 + 文档体系 | 6 次 commit，16 个文件 |
 | M0-02 | MCP 配置 + Unity 项目搭建 | 已完成 | Trae | Unity 项目 + MCP 连接 | ✅ MCP 三端联通验证通过 |
-| M0-03 | 游戏设计文档重写 | 待开始 | WB | docs/design/design.md | 参考 archive/design-v1-godot.md |
+| M0-03 | 游戏设计文档重写 | 进行中 | WB | docs/design/design.md | 构筑系统双线分离完成，§1-§9 框架成型，待阵营 IP 讨论后深入 |
 | M0-04 | 技术架构文档重写 | 待开始 | WB | docs/dev/architecture.md | 参考 archive/architecture-v1-godot.md |
 
 ---
