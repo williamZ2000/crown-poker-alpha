@@ -1,5 +1,17 @@
 # 项目变更日志
 
+## 2026-08-07
+
+- **协作体系重构** — 终止 WorkBuddy/Trae 双平台，Codex 单一智能体接管项目
+  - 旧协作文件归档：AI_WORK_RULES.md、COLLABORATION.md、.trae/ → docs/archive/
+  - 新建 PROJECT_RULES.md（单智能体行为准则，保留五步闭环 + 决策留痕）
+  - Git 提交规范统一为 `[Codex] 类型(范围): 描述 (任务ID)`
+  - 关联决策: #D10
+
+- **M0-04 完成** — 技术架构文档定稿
+  - docs/dev/architecture.md v1.0：4 层事件驱动（Core → Domain → Flow → UI）+ 依赖规则 + 目录结构 + ScriptableObject 配置清单 + M1 系统模块规划
+  - 关联决策: #D10
+
 ## 2026-07-28
 
 - **骨架补完** — 弃牌时机 + 战斗AI + 花色派系收益

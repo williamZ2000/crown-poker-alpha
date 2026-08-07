@@ -156,3 +156,22 @@
 - §7.3 战斗流程改为战斗AI规则+英雄站位两表
 
 **关联文件**: docs/design/design.md
+
+## #D10 — 2026-08-07: 协作体系重构（Codex 单一智能体）
+
+**背景**: 项目原有的 WorkBuddy（文档/项目管理）与 Trae（代码/Unity/MCP）双平台协作体系，设计初衷是解决两个 AI 平台无法直接通信的问题。张总改为直接使用 Codex 后，双平台传话与双重审核环节成为多余负担。
+
+**决策**:
+1. 终止 WorkBuddy/Trae 双平台协作，改为 Codex 单一智能体模式——项目管理、技术开发、质量审核三位一体
+2. 旧协作体系文件归档：`AI_WORK_RULES.md`、`COLLABORATION.md`、`.trae/` 移入 `docs/archive/`
+3. 新建 `PROJECT_RULES.md`（单智能体行为准则，保留五步闭环与决策留痕机制）
+4. 完成 M0-04：`docs/dev/architecture.md` 技术架构定稿（4 层事件驱动：Core → Domain → Flow → UI）
+5. Git 提交规范统一为 `[Codex] 类型(范围): 描述 (任务ID)`
+
+**影响**:
+- README.md 角色分工与文档导航更新
+- tasks.md 平台列取消 WB/Trae 区分
+- CONTEXT.md / MEMORY.md 核心规则改写为单智能体版
+- design.md 本次不动（张总指示，待后续批准再修复残留矛盾）
+
+**关联文件**: PROJECT_RULES.md、docs/dev/architecture.md、README.md、.workbuddy/tasks/tasks.md、.workbuddy/session/CONTEXT.md、.workbuddy/memory/MEMORY.md、docs/CHANGELOG.md、docs/trace/doc-code-map.md

@@ -1,18 +1,18 @@
 # 项目长期记忆
 
-> 项目详情见 `README.md`。本文档仅存储 AI 行为约束和项目长期记忆。
-> 本文档会在每次会话启动时自动注入 WorkBuddy 的系统提示词中。
+> 项目详情见 `README.md`。本文档存储 AI 行为约束和项目长期记忆。
+> 每次会话启动时按 `PROJECT_RULES.md` 中的启动必读顺序读取。
 
 ---
 
 ## 核心铁律（自动注入，优先级最高）
 
-以下规则 WorkBuddy 必须无条件遵守，违反即为严重违规：
+以下规则 Codex 必须无条件遵守，违反即为严重违规：
 
 1. **决策权归张总** — 任何修改文件的操作前，必须先出方案（改什么、为什么改、影响范围），等张总明确审批通过后才能执行。
-2. **分工铁律** — WorkBuddy 只管理文档（.md、配置、项目管理），绝不修改代码（.cs）、不操作 Unity、不写入 MCP 调用。另承担代码审核/验收职责（读代码、对照文档验收、更新状态）。Trae 负责所有编码和 MCP 实施。
-3. **执行前确认（五步闭环）** — 方案 → 列文件清单 → 等张总审批 → 执行 → 汇报结果。缺一不可。每次操作完成后立即更新关联文档（TASK_CLAIM.md、CONTEXT.md、CHANGELOG.md 等），不等"会话结束"。
-4. **启动必读清单** — 每次会话开始必须按顺序读取：`AI_WORK_RULES.md` → `COLLABORATION.md` → `.workbuddy/memory/MEMORY.md`（本文档）→ `.workbuddy/session/CONTEXT.md` → `TASK_CLAIM.md`
+2. **单一执行者** — Codex 承接项目管理、技术开发、质量审核全部职责；不再有平台间分工与传话。
+3. **执行前确认（五步闭环）** — 方案 → 列文件清单 → 等张总审批 → 执行 → 汇报结果。缺一不可。每次操作完成后立即更新关联文档（CONTEXT.md、CHANGELOG.md 等），不等"会话结束"。
+4. **启动必读清单** — 每次会话开始必须按顺序读取：`PROJECT_RULES.md` → `.workbuddy/session/CONTEXT.md` → `.workbuddy/memory/MEMORY.md`（本文档）→ `.workbuddy/tasks/tasks.md` → `README.md`
 5. **决策留痕与联动更新** — 每个重要决策必须在 `decisions.md` 留记录，同步更新 `CHANGELOG.md`、`CONTEXT.md` 及相关设计/开发文档。
 6. **不确定就反问** — 不猜测张总意图，不替张总做决定。
 7. **最小修改原则** — 能用最小改动解决问题就不做大改。
@@ -21,7 +21,7 @@
 
 ## 技术偏好
 
-- **架构**: 4 层事件驱动（Core → Domain → Flow → UI）
+- **架构**: 4 层事件驱动（Core → Domain → Flow → UI），已定稿于 `docs/dev/architecture.md`
 - **配置系统**: Unity ScriptableObject（非 JSON，Schema 约束 + 编辑器可视化）
 - **事件通信**: C# event/delegate（非全局单例 EventBus）
 - **命名规范**: PascalCase（C# 惯例）
@@ -34,13 +34,11 @@
 
 | 文件 | 用途 |
 |------|------|
-| `COLLABORATION.md` | 跨平台协作协议 |
-| `AI_WORK_RULES.md` | AI 行为准则（详细版） |
-| `TASK_CLAIM.md` | 当前任务声明 |
+| `PROJECT_RULES.md` | AI 行为准则（Codex 单一智能体版） |
 | `.workbuddy/tasks/tasks.md` | 任务看板（M0-M5） |
 | `.workbuddy/memory/decisions.md` | 技术决策记录 |
 | `docs/design/design.md` | 游戏设计总纲 |
-| `docs/dev/architecture.md` | 技术架构文档 |
+| `docs/dev/architecture.md` | 技术架构文档（v1.0 已定稿） |
 | `docs/trace/doc-code-map.md` | 文档代码映射表 |
 | `docs/CHANGELOG.md` | 项目变更日志 |
 | `docs/archive/` | 废弃文档归档 |
@@ -51,6 +49,7 @@
 
 （每次重要决策后在此追加：日期 | 决策 | 原因）
 
+- 2026-08-07 | 协作体系重构 | 终止 WorkBuddy/Trae 双平台，Codex 单一智能体；旧规则归档至 docs/archive/；PROJECT_RULES.md + 技术架构文档（M0-04）定稿
 - 2026-07-28 | 骨架补完(弃牌+战斗AI+花色收益) | 弃牌=出牌阶段随时；战斗AI=最近索敌+特殊例外；花色派系收益(§3.3.1)；英雄固定后排站位
 - 2026-07-28 | 商店频率+利息统一 | 每回合商店+每回合利息结算(原每关一次)；删除利息备选方案(每5金1利)；§11重构为已定稿/待定分区
 - 2026-07-28 | 局外成长+敌人AI | 解锁阵营/英雄/将领+难度分层(数值+玩法限制参照小丑牌)；敌人=脚本模板+随机变量、三回合递增(R1普通/R2精英+Buff/R3英雄+Buff+玩家Debuff)

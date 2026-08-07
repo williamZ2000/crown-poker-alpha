@@ -12,9 +12,11 @@
 
 | 角色 | 职责 | 工具 |
 |------|------|------|
-| 张总 | 唯一决策者、审核者 | 人工 |
-| WorkBuddy | 项目经理 + 产品经理（文档、方案、进度） | CLI + Editor |
-| Trae | 技术开发团队（MCP、代码、Unity 场景） | Unity Editor |
+| 张总 | 唯一决策者、审批人、审核者 | 人工 |
+| Codex | 项目管理 + 技术开发 + 质量把关（三位一体） | CLI + Unity Editor + MCP |
+
+> 2026-08-07 起由 Codex 单一智能体承接项目全部 AI 工作（原 WorkBuddy + Trae 职责合并，决策 #D10）。
+> 旧协作体系文件已归档至 `docs/archive/`。
 
 ## 文档导航
 
@@ -22,11 +24,10 @@
 
 | 文件 | 用途 | 自动注入 |
 |------|------|----------|
-| `AI_WORK_RULES.md` | AI 行为准则（详细版） | ❌ |
-| `COLLABORATION.md` | 跨平台协作协议 | ❌ |
-| `.workbuddy/memory/MEMORY.md` | 项目长期记忆 + 核心铁律 | ✅ WorkBuddy |
+| `PROJECT_RULES.md` | AI 行为准则（Codex 单一智能体版） | ❌ |
+| `.workbuddy/memory/MEMORY.md` | 项目长期记忆 + 技术偏好 | ✅ |
 | `.workbuddy/session/CONTEXT.md` | 当前上下文快照 | ❌ |
-| `TASK_CLAIM.md` | 当前任务声明 | ❌ |
+| `.workbuddy/tasks/tasks.md` | 任务看板 | ❌ |
 
 ### 设计 — 做什么
 
@@ -44,7 +45,6 @@
 
 | 文件 | 用途 |
 |------|------|
-| `.workbuddy/tasks/tasks.md` | 任务看板 |
 | `.workbuddy/memory/decisions.md` | 技术决策记录 |
 | `docs/trace/doc-code-map.md` | 文档代码映射表 |
 | `docs/CHANGELOG.md` | 项目变更日志 |
@@ -61,8 +61,8 @@
 项目严格遵守以下自上而下的依赖链：
 
 ```
-设计文档 (docs/design/*.md)
-    → 开发文档 (docs/dev/*.md)
+设计文档 (docs/design/design.md)
+    → 开发文档 (docs/dev/architecture.md)
         → 代码实现 (Assets/Scripts/**/*.cs)
 ```
 
