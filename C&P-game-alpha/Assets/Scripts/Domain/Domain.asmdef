@@ -1,0 +1,16 @@
+{
+    "name": "CnP.Domain",
+    "rootNamespace": "CnP.Domain",
+    "references": [
+        "CnP.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
