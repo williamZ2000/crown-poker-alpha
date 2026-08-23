@@ -79,11 +79,101 @@ namespace CnP.Flow
             unit.Position = BoardGeometry.ClampToPlayerZone(target);
         }
 
+        // ── 多选与编组（§7.2.3 RTS 式布阵）──────────────
+
+        readonly HashSet<int> _selectedIds = new HashSet<int>();
+
+        /// <summary>当前选中单位 Id 集合（仅己方）</summary>
+        public IReadOnlyCollection<int> SelectedIds => _selectedIds;
+
+        public void SelectSingle(UnitInstance unit)
+        {
+            _selectedIds.Clear();
+            if (unit != null && unit.Side == Side.Player && unit.Alive)
+                _selectedIds.Add(unit.Id);
+        }
+
+        public void ToggleSelect(UnitInstance unit)
+        {
+            if (unit == null || unit.Side != Side.Player || !unit.Alive) return;
+            if (!_selectedIds.Add(unit.Id)) _selectedIds.Remove(unit.Id);
+        }
+
+        /// <summary>全选同兵种名单位（双击同类全选）</summary>
+        public void SelectAllOfType(string unitName)
+        {
+            _selectedIds.Clear();
+            foreach (var u in _units)
+                if (u.Side == Side.Player && u.Alive && u.Stats.Name == unitName)
+                    _selectedIds.Add(u.Id);
+        }
+
+        /// <summary>全选场上己方单位（Ctrl+A）</summary>
+        public void SelectAllPlayers()
+        {
+            _selectedIds.Clear();
+            foreach (var u in _units)
+                if (u.Side == Side.Player && u.Alive)
+                    _selectedIds.Add(u.Id);
+        }
+
+        public void ClearSelection() => _selectedIds.Clear();
+
+        /// <summary>框选：把矩形内的己方单位加入选中（additive=false 时先清空）</summary>
+        public void SelectInRect(Vector2 a, Vector2 b, bool additive)
+        {
+            if (!additive) _selectedIds.Clear();
+            var min = Vector2.Min(a, b);
+            var max = Vector2.Max(a, b);
+            foreach (var u in _units)
+            {
+                if (u.Side != Side.Player || !u.Alive) continue;
+                if (u.Position.x >= min.x && u.Position.x <= max.x &&
+                    u.Position.y >= min.y && u.Position.y <= max.y)
+                    _selectedIds.Add(u.Id);
+            }
+        }
+
+        /// <summary>取选中单位（稳定按 Id 升序，保证线列落位顺序可预期）</summary>
+        public List<UnitInstance> GetSelected()
+        {
+            var list = new List<UnitInstance>();
+            foreach (var u in _units)
+                if (_selectedIds.Contains(u.Id) && u.Alive) list.Add(u);
+            list.Sort((x, y) => x.Id.CompareTo(y.Id));
+            return list;
+        }
+
+        /// <summary>整组保持相对阵型移动到目标点（右键单击；逐单位钳制玩家半场）</summary>
+        public void MoveSelectedGroupTo(Vector2 target)
+        {
+            var sel = GetSelected();
+            if (sel.Count == 0) return;
+            var current = new Vector2[sel.Count];
+            for (int i = 0; i < sel.Count; i++) current[i] = sel[i].Position;
+            var targets = FormationPlanner.GroupMove(current, target);
+            for (int i = 0; i < sel.Count; i++)
+                sel[i].Position = BoardGeometry.ClampToPlayerZone(targets[i]);
+        }
+
+        /// <summary>线列落位（Shift+右键拖拽松开；anchor=线列中心，halfLength=拖拽半长）</summary>
+        public void PlaceSelectedInLine(Vector2 anchor, float halfLength)
+        {
+            var sel = GetSelected();
+            if (sel.Count == 0) return;
+            var arranged = FormationPlanner.ArrangeLine(
+                anchor, sel.Count, halfLength,
+                BoardGeometry.PlayerZoneWidth(), BoardGeometry.PlayerZoneHeight());
+            for (int i = 0; i < sel.Count; i++)
+                sel[i].Position = BoardGeometry.ClampToPlayerZone(arranged[i]);
+        }
+
         public void Clear()
         {
             _units.Clear();
             PlayerUnitCount = 0;
             _spawnCursorY = 0f;
+            _selectedIds.Clear();
             FlowEvents.RaiseBoardChanged();
         }
 

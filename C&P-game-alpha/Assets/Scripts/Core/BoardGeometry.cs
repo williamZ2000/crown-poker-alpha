@@ -44,5 +44,17 @@ namespace CnP.Core
             float maxY = CenterY + HalfHeight - Margin * 0.5f - unitHalf;
             return new Vector2(Mathf.Clamp(pos.x, minX, maxX), Mathf.Clamp(pos.y, minY, maxY));
         }
+
+        /// <summary>玩家半场可用横向宽度（布阵线列容量计算用）</summary>
+        public static float PlayerZoneWidth(float unitHalf = 0.4f)
+        {
+            return (-MidGap - unitHalf) - (-HalfWidth + Margin + unitHalf);
+        }
+
+        /// <summary>玩家半场可用纵向深度（布阵线列容量计算用）</summary>
+        public static float PlayerZoneHeight(float unitHalf = 0.4f)
+        {
+            return (CenterY + HalfHeight - Margin * 0.5f - unitHalf) - (CenterY - HalfHeight + Margin * 0.5f + unitHalf);
+        }
     }
 }
