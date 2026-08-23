@@ -49,8 +49,20 @@
 
 ## 里程碑 M1: 核心系统
 
-> 设计阻塞已清零（#D37，2026-08-23）；待张总批准启动后拆分任务。
-> 模块蓝图见 docs/dev/architecture.md §3.4（CardSystem → BoardSystem → CombatSystem → EconomySystem → ShopSystem → HeroSystem → BuffSystem → MetaSystem → EnemyAISystem）。
+> **2026-08-23 张总批准启动**（原型垂直切片方案，P-01~P-07，方案全文存档于 CONTEXT.md）。
+> 模块蓝图见 docs/dev/architecture.md §3.4；原型用运行时自举 + 2D 色块 + IMGUI，不依赖编辑器操作。
+
+### M1-PRD: 可玩原型（垂直切片）
+
+| ID | 任务 | 状态 | 预计产出 |
+|----|------|------|----------|
+| P-01 | 运行时自举骨架（场景/相机/棋盘/事件总线） | 待开始 | Assets/Scripts/Core/ + Bootstrap |
+| P-02 | 卡牌域：52 张牌堆/抽牌/牌型判定引擎 | 待开始 | Assets/Scripts/Domain/Card/ |
+| P-03 | 回合流状态机 + 出牌交互（判定→召唤） | 待开始 | Assets/Scripts/Flow/ |
+| P-04 | 战斗引擎（索敌/移动/攻击/伤害/时限） | 待开始 | Assets/Scripts/Flow/CombatSystem |
+| P-05 | 经济 + 商店（货架/购买/出售/刷新/利息） | 待开始 | Assets/Scripts/Flow/Shop+Economy |
+| P-06 | 敌军预算生成 + 关卡循环 + 终局 | 待开始 | Assets/Scripts/Flow/EnemyAI |
+| P-07 | 可玩性打磨（显示/反馈/结算面板） | 待开始 | UI 层补完 |
 
 ## 里程碑 M2+: 后续
 
