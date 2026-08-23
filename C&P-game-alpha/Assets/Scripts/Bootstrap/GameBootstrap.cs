@@ -1,4 +1,5 @@
 using CnP.Core;
+using CnP.Flow;
 using CnP.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -36,13 +37,16 @@ namespace CnP.Bootstrap
             cam.GetUniversalAdditionalCameraData(); // URP 附加数据，避免管线告警
         }
 
-        /// <summary>游戏根节点：挂接各 UI 控制器与流程控制器</summary>
+        /// <summary>游戏根节点：挂接流程控制器与各 UI 控制器</summary>
         static void BuildGameRoot()
         {
             var root = new GameObject("GameRoot");
             Object.DontDestroyOnLoad(root);
+            root.AddComponent<RoundFlowController>(); // 流程层先就位（UI 依赖其 Instance）
+            root.AddComponent<BoardView>();
+            root.AddComponent<HUD>();
+            root.AddComponent<HandView>();
             root.AddComponent<TitleScreen>();
-            // S3 起：root.AddComponent<RoundFlowController>(); S4 起：CombatSystem 等
         }
     }
 }

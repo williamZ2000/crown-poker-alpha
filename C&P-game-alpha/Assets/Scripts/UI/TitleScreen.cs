@@ -1,3 +1,4 @@
+using CnP.Flow;
 using UnityEngine;
 
 namespace CnP.UI
@@ -77,16 +78,15 @@ namespace CnP.UI
             }
             else
             {
-                // S1 占位提示：S2（卡牌域）/S3（回合流）完成后移除
-                GUI.Label(new Rect(12f, 8f, 500f, 22f),
-                    "已进入对局 —— S2 卡牌系统开发中", _hintStyle);
+                // 对局进行中由 HUD/HandView 接管界面，标题不再绘制
             }
         }
 
         void StartGame()
         {
             HasStarted = true;
-            // S3 起改为：RoundFlowController.Instance.StartNewRound();
+            if (RoundFlowController.Instance != null)
+                RoundFlowController.Instance.StartNewRound();
         }
 
         /// <summary>回到标题（结算面板"返回标题"用）</summary>
