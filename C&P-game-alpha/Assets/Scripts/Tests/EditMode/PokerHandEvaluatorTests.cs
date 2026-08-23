@@ -152,11 +152,47 @@ namespace CnP.Tests
         }
 
         [Test]
-        public void 顺子_A2345不连续无效()
+        public void 顺子_A2345有效按5判档()
         {
             var p = Eval(C(Suit.Spade, 14), C(Suit.Heart, 2), C(Suit.Club, 3),
                          C(Suit.Diamond, 4), C(Suit.Spade, 5));
-            Assert.IsNull(p); // A 只作顶端
+            Assert.AreEqual(PatternKind.Straight, p.Kind);
+            Assert.AreEqual(5, p.KeyRank); // A 低用判档取顺内最高非 A 牌（#D38）
+        }
+
+        [Test]
+        public void 同花顺_A2345有效()
+        {
+            var p = Eval(C(Suit.Heart, 14), C(Suit.Heart, 2), C(Suit.Heart, 3),
+                         C(Suit.Heart, 4), C(Suit.Heart, 5));
+            Assert.AreEqual(PatternKind.StraightFlush, p.Kind);
+            Assert.AreEqual(5, p.KeyRank);
+        }
+
+        [Test]
+        public void 顺子_A23456按6判档()
+        {
+            var p = Eval(C(Suit.Spade, 14), C(Suit.Heart, 2), C(Suit.Club, 3),
+                         C(Suit.Diamond, 4), C(Suit.Spade, 5), C(Suit.Heart, 6));
+            Assert.AreEqual(PatternKind.Straight, p.Kind);
+            Assert.AreEqual(6, p.KeyRank);
+        }
+
+        [Test]
+        public void 连对_AA22仍无效()
+        {
+            var p = Eval(C(Suit.Spade, 14), C(Suit.Heart, 14),
+                         C(Suit.Spade, 2), C(Suit.Heart, 2),
+                         C(Suit.Spade, 3), C(Suit.Heart, 3));
+            Assert.IsNull(p); // A 两用不外溢到连对（#D38）：A22 33 不连续
+        }
+
+        [Test]
+        public void 顺子_A不能同时高低用()
+        {
+            var p = Eval(C(Suit.Spade, 14), C(Suit.Heart, 12), C(Suit.Club, 13),
+                         C(Suit.Diamond, 2), C(Suit.Spade, 3), C(Suit.Heart, 4));
+            Assert.IsNull(p); // QKA234：A 只能取一种身份，整体无效
         }
 
         [Test]

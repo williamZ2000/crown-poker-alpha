@@ -43,6 +43,7 @@ namespace CnP.Bootstrap
             var root = new GameObject("GameRoot");
             Object.DontDestroyOnLoad(root);
             root.AddComponent<RoundFlowController>(); // 流程层先就位（UI 依赖其 Instance）
+            root.AddComponent<CombatSystem>();
             root.AddComponent<BoardView>();
             root.AddComponent<HUD>();
             root.AddComponent<HandView>();

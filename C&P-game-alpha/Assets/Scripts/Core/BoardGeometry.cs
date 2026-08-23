@@ -33,5 +33,16 @@ namespace CnP.Core
             float maxY = CenterY + HalfHeight - Margin * 0.5f - unitHalf;
             return new Vector2(Mathf.Clamp(pos.x, minX, maxX), Mathf.Clamp(pos.y, minY, maxY));
         }
+
+        /// <summary>全棋盘可行区域（战斗移动用——战斗中允许越过中线，否则近战永远够不到中线外的远程；
+        /// "不可被推出半场"（§7.1）指防击退位移类效果，不限制主动战斗移动）</summary>
+        public static Vector2 ClampToBoard(Vector2 pos, float unitHalf = 0.4f)
+        {
+            float minX = -HalfWidth + Margin + unitHalf;
+            float maxX = HalfWidth - Margin - unitHalf;
+            float minY = CenterY - HalfHeight + Margin * 0.5f + unitHalf;
+            float maxY = CenterY + HalfHeight - Margin * 0.5f - unitHalf;
+            return new Vector2(Mathf.Clamp(pos.x, minX, maxX), Mathf.Clamp(pos.y, minY, maxY));
+        }
     }
 }

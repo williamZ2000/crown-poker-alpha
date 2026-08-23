@@ -88,8 +88,16 @@ namespace CnP.UI
 
                 if (GUI.Button(rect, card.Display, style))
                 {
-                    if (_discardMode) flow.DiscardCard(card);
-                    else flow.Cards.ToggleSelect(card);
+                    if (_discardMode && flow.Cards.DiscardsLeft > 0)
+                    {
+                        flow.DiscardCard(card);
+                        // ISSUE-002 修复：弃牌次数耗尽自动退出弃牌模式，避免点牌永远走弃牌分支
+                        if (flow.Cards.DiscardsLeft <= 0) _discardMode = false;
+                    }
+                    else
+                    {
+                        flow.Cards.ToggleSelect(card);
+                    }
                 }
                 style.normal.textColor = prevColor;
                 GUI.backgroundColor = prevBg;

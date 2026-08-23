@@ -24,7 +24,11 @@ namespace CnP.UI
         Transform _root;
         readonly Dictionary<int, GameObject> _views = new Dictionary<int, GameObject>();
         readonly Dictionary<int, SpriteRenderer> _bodies = new Dictionary<int, SpriteRenderer>();
+        readonly Dictionary<int, Transform> _hpFills = new Dictionary<int, Transform>();
         public int SelectedUnitId { get; private set; }
+
+        const float BarWidth = 0.7f;
+        const float BarY = 0.42f;
 
         Font _font;
 
@@ -54,6 +58,7 @@ namespace CnP.UI
             foreach (var go in _views.Values) Destroy(go);
             _views.Clear();
             _bodies.Clear();
+            _hpFills.Clear();
 
             var flow = RoundFlowController.Instance;
             if (flow == null) return;
@@ -90,11 +95,30 @@ namespace CnP.UI
             mr.sharedMaterial = _font.material;
             mr.sortingOrder = 12;
 
+            // 血条（底 + 填充，填充按 Hp/MaxHp 左锚伸缩）
+            var hpBg = MakeBar(root.transform, "HpBg", new Color(0.08f, 0.08f, 0.1f), 11);
+            hpBg.localPosition = new Vector3(0f, BarY, 0f);
+            var hpFill = MakeBar(root.transform, "HpFill", Color.green, 12);
+            hpFill.localPosition = new Vector3(-BarWidth * 0.5f + BarWidth * 0.5f, BarY, 0f); // SyncViews 每帧校准
+            _hpFills[unit.Id] = hpFill;
+
             _views[unit.Id] = root;
             _bodies[unit.Id] = sr;
         }
 
-        /// <summary>每帧同步位置与选中态（战斗移动由 CombatSystem 写 Position）</summary>
+        static Transform MakeBar(Transform parent, string name, Color color, int order)
+        {
+            var go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            go.transform.localScale = new Vector3(BarWidth, 0.085f, 1f);
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = RuntimeAssets.WhiteSquare;
+            sr.color = color;
+            sr.sortingOrder = order;
+            return go.transform;
+        }
+
+        /// <summary>每帧同步位置/选中态/血条（战斗移动由 CombatSystem 写 Position）</summary>
         void SyncViews()
         {
             var flow = RoundFlowController.Instance;
@@ -110,6 +134,14 @@ namespace CnP.UI
                     go.transform.GetChild(0).localScale = selected
                         ? new Vector3(0.86f, 0.86f, 1f)
                         : new Vector3(0.72f, 0.72f, 1f);
+                }
+                if (_hpFills.TryGetValue(unit.Id, out var fill))
+                {
+                    float f = unit.MaxHp > 0f ? Mathf.Clamp01(unit.Hp / unit.MaxHp) : 0f;
+                    fill.localScale = new Vector3(BarWidth * f, 0.085f, 1f);
+                    fill.localPosition = new Vector3(-BarWidth * 0.5f + BarWidth * f * 0.5f, BarY, 0f);
+                    fill.GetComponent<SpriteRenderer>().color = Color.Lerp(
+                        new Color(0.8f, 0.28f, 0.22f), new Color(0.32f, 0.78f, 0.38f), f);
                 }
             }
         }

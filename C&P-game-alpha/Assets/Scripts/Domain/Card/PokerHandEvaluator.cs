@@ -51,19 +51,38 @@ namespace CnP.Domain.Card
             if (counts.Length == 1)
             {
                 int per = counts[0];
-                bool consecutive = IsConsecutive(groups.Select(g => g.Rank).ToList());
+                var rankList = groups.Select(g => g.Rank).ToList();
                 int n = groups.Count;
-                int high = groups[groups.Count - 1].Rank;
+                bool consecutive = IsConsecutive(rankList);
 
                 if (per == 2 && n >= 3 && consecutive)
-                    return new HandPattern(PatternKind.PairRun, selection.ToList(), high, 0, n);
+                    return new HandPattern(PatternKind.PairRun, selection.ToList(), rankList[n - 1], 0, n);
                 if (per == 3 && n >= 2 && consecutive)
-                    return new HandPattern(PatternKind.TripleRun, selection.ToList(), high, 0, n);
-                if (per == 1 && n >= 5 && consecutive)
+                    return new HandPattern(PatternKind.TripleRun, selection.ToList(), rankList[n - 1], 0, n);
+
+                if (per == 1 && n >= 5)
                 {
-                    bool sameSuit = selection.All(c => c.Suit == selection[0].Suit);
-                    var kind = sameSuit ? PatternKind.StraightFlush : PatternKind.Straight;
-                    return new HandPattern(kind, selection.ToList(), high, 0, n);
+                    int high = rankList[n - 1];
+
+                    // A 两用（#D38）：普通连续失败时尝试 A=1 视角（仅顺子/同花顺路径）；
+                    // 判档取顺内最高非 A 牌（A2345 → 5）；连对/连三张不经过此分支
+                    if (!consecutive && rankList.Contains(14) && rankList[0] == 2)
+                    {
+                        var wheel = new List<int> { 1 };
+                        wheel.AddRange(rankList.Where(r => r != 14));
+                        if (IsConsecutive(wheel))
+                        {
+                            consecutive = true;
+                            high = rankList.Where(r => r != 14).Max();
+                        }
+                    }
+
+                    if (consecutive)
+                    {
+                        bool sameSuit = selection.All(c => c.Suit == selection[0].Suit);
+                        var kind = sameSuit ? PatternKind.StraightFlush : PatternKind.Straight;
+                        return new HandPattern(kind, selection.ToList(), high, 0, n);
+                    }
                 }
             }
 

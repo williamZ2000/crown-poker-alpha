@@ -23,8 +23,8 @@ namespace CnP.Flow
         public int RoundsUsed { get; private set; }
         public int RoundsLeft => GameParams.PlayRoundsBase - RoundsUsed;
 
-        /// <summary>三带二小增益待生效（本场战斗全体护甲 +2，#D18；由战斗引擎开局应用）</summary>
-        public bool FullHouseBuffPending { get; private set; }
+        /// <summary>三带二小增益待生效（本场战斗全体护甲 +2，#D18；战斗引擎开局应用后置回 false）</summary>
+        public bool FullHouseBuffPending { get; set; }
 
         void Awake()
         {
@@ -95,19 +95,14 @@ namespace CnP.Flow
             return false;
         }
 
-        /// <summary>开战（玩家随时可点）→ 战斗阶段</summary>
+        /// <summary>开战（玩家随时可点）→ 战斗阶段（S5 起敌军生成在此前接入）</summary>
         public void RequestStartBattle()
         {
             if (Phase != Phase.Play) return;
             Cards.ClearSelection();
             SetPhase(Phase.Battle);
-            // S4：CombatSystem.Begin(...) 在此接入（敌军生成 + 自动战斗）
-        }
-
-        /// <summary>S3 临时：战斗占位返回出牌（S4 战斗引擎接入后移除）</summary>
-        public void TemporaryReturnToPlay()
-        {
-            if (Phase == Phase.Battle) SetPhase(Phase.Play);
+            if (CombatSystem.Instance != null)
+                CombatSystem.Instance.Begin();
         }
 
         /// <summary>战斗结束（S4 战斗引擎回调）→ 结算阶段</summary>

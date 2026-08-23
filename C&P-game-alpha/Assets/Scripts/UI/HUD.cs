@@ -5,31 +5,39 @@ using UnityEngine;
 namespace CnP.UI
 {
     /// <summary>
-    /// 顶部 HUD：关卡/阶段/资源信息 + 提示条（Toast）。
-    /// 战斗阶段占位面板在 S4 移除。
+    /// 顶部 HUD：关卡/阶段/资源信息 + 提示条（Toast）+ 战斗结果面板（完整结算面板 S6 接入）。
     /// </summary>
     public class HUD : MonoBehaviour
     {
         string _toast;
         float _toastUntil;
+        bool? _playerWin; // 战斗结果（null = 未出）
         GUIStyle _barStyle;
         GUIStyle _toastStyle;
+        GUIStyle _resultStyle;
         bool _built;
 
         void Awake()
         {
             FlowEvents.Toast += OnToast;
+            FlowEvents.BattleEnded += OnBattleEnded;
         }
 
         void OnDestroy()
         {
             FlowEvents.Toast -= OnToast;
+            FlowEvents.BattleEnded -= OnBattleEnded;
         }
 
         void OnToast(string msg)
         {
             _toast = msg;
             _toastUntil = Time.time + 2.6f;
+        }
+
+        void OnBattleEnded(bool playerWin)
+        {
+            _playerWin = playerWin;
         }
 
         void BuildStyles()
@@ -45,6 +53,12 @@ namespace CnP.UI
                 fontSize = 16,
                 alignment = TextAnchor.MiddleCenter,
                 normal = { textColor = new Color(0.98f, 0.9f, 0.6f) },
+            };
+            _resultStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = 30,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = new Color(0.95f, 0.86f, 0.55f) },
             };
             _built = true;
         }
@@ -67,19 +81,42 @@ namespace CnP.UI
                 "   轮次剩 " + flow.RoundsLeft +
                 "   弃牌剩 " + flow.Cards.DiscardsLeft, _barStyle);
 
-            // S3 战斗占位面板（S4 战斗引擎接入后移除）
-            if (flow.Phase == Phase.Battle)
+            // 战斗中计时
+            if (flow.Phase == Phase.Battle && CombatSystem.Instance != null)
+                GUI.Label(new Rect(0f, 10f, Screen.width, 22f),
+                    "⏱ " + CombatSystem.Instance.BattleTime.ToString("F0") + "s", _centerStyle ?? BuildCenterStyle());
+
+            // 战斗结果面板（完整结算与重开 S6 接入）
+            if (flow.Phase == Phase.Settle)
             {
-                var box = new Rect(Screen.width * 0.5f - 190f, Screen.height * 0.42f, 380f, 110f);
-                GUI.Box(box, "");
-                GUI.Label(new Rect(box.x, box.y + 18f, box.width, 24f), "战斗阶段 —— S4 引擎接入中", _toastStyle);
-                if (GUI.Button(new Rect(box.center.x - 90f, box.yMax - 46f, 180f, 32f), "返回出牌（临时）"))
-                    flow.TemporaryReturnToPlay();
+                var prev = GUI.color;
+                GUI.color = new Color(0f, 0f, 0f, 0.75f);
+                GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
+                GUI.color = prev;
+
+                string title = _playerWin == true ? "胜  利" : _playerWin == false ? "战  败" : "战斗结束";
+                GUI.Label(new Rect(0f, Screen.height * 0.34f, Screen.width, 48f), title, _resultStyle);
+                GUI.Label(new Rect(0f, Screen.height * 0.34f + 58f, Screen.width, 24f),
+                    "关卡 1-1 · 完整结算面板与重新开始将在 S6 接入", _toastStyle);
+                if (GUI.Button(new Rect(Screen.width * 0.5f - 90f, Screen.height * 0.34f + 100f, 180f, 34f), "回到标题"))
+                    flow.ReturnToTitle();
             }
 
             // 提示条
             if (!string.IsNullOrEmpty(_toast) && Time.time < _toastUntil)
                 GUI.Label(new Rect(0f, 64f, Screen.width, 26f), _toast, _toastStyle);
+        }
+
+        GUIStyle _centerStyle;
+        GUIStyle BuildCenterStyle()
+        {
+            _centerStyle = new GUIStyle(GUI.skin.label)
+            {
+                fontSize = 14,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = new Color(0.82f, 0.82f, 0.88f) },
+            };
+            return _centerStyle;
         }
     }
 }
