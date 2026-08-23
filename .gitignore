@@ -43,3 +43,6 @@ CrashlyticsBuildLog.csv
 *.mdb.meta
 
 # Unity3D meta files (DO NOT ignore .meta - Unity needs them for asset tracking)
+
+# 原型截图（MCP 验证产物，不入库）
+C&P-game-alpha/Assets/Screenshots/
