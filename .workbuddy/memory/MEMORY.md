@@ -49,6 +49,7 @@
 | `.workbuddy/memory/decisions.md` | 技术决策记录 |
 | `docs/design/design.md` | 游戏设计总纲 |
 | `docs/dev/architecture.md` | 技术架构文档（v1.0 已定稿） |
+| `docs/dev/issue-log.md` | 开发问题记录（技术缺陷四段式；规则类走 decisions.md 不入此） |
 | `docs/trace/doc-code-map.md` | 文档代码映射表 |
 | `docs/CHANGELOG.md` | 项目变更日志 |
 | `docs/archive/` | 废弃文档归档 |
