@@ -13,14 +13,14 @@ namespace CnP.Domain.Enemy
     /// </summary>
     public static class Tier1Pool
     {
-        /// <summary>池模板（名字, 职能源值键）</summary>
-        static readonly (string name, string role)[] Templates =
+        /// <summary>池模板（名字, 职能）</summary>
+        static readonly (string name, UnitRole role)[] Templates =
         {
-            ("天灵刀手", "战士"),
-            ("天灵轻骑", "战士"),
-            ("天灵枪卫", "坦克"),
-            ("天灵弓手", "射手"),
-            ("天灵猎手", "射手"),
+            ("天灵刀手", UnitRole.战士),
+            ("天灵轻骑", UnitRole.战士),
+            ("天灵枪卫", UnitRole.坦克),
+            ("天灵弓手", UnitRole.射手),
+            ("天灵猎手", UnitRole.射手),
         };
 
         /// <summary>生成整池标准件（AttackType 全物理，近战/远程由职能决定）</summary>
@@ -29,11 +29,11 @@ namespace CnP.Domain.Enemy
             var list = new List<UnitStats>();
             foreach (var (name, role) in Templates)
             {
-                var src = GameParams.RoleSources[role];
+                var src = RoleSourceMap.Get(role);
                 list.Add(new UnitStats
                 {
                     Name = name,
-                    Role = (UnitRole)Enum.Parse(typeof(UnitRole), role),
+                    Role = role,
                     Attack = AttackType.物理,
                     Family = "天灵",
                     Hp = src.Hp * tierMultiplier,

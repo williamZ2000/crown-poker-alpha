@@ -78,7 +78,7 @@ namespace CnP.Domain.Unit
         {
             var tier = TierOf(tierRank);
             var entry = UnitCatalog.Get(family, tier);
-            var src = GameParams.RoleSources[entry.role.ToString()];
+            var src = RoleSourceMap.Get(entry.role);
 
             // 无攻击单位主攻取 0（帝国 v1 目录暂无，规则保留）
             float atk = entry.attack == AttackType.无攻击 ? 0f : src.Atk;

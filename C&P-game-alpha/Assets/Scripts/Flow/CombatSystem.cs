@@ -58,7 +58,13 @@ namespace CnP.Flow
                 return;
             }
 
-            float dt = Time.deltaTime;
+            TickOnce(Time.deltaTime);
+        }
+
+        /// <summary>推进一帧战斗（计时 + 单位行为 + 结束检查）。公开作为测试接缝（TD-004 偿还）：
+        /// 同步模拟 / PlayMode 测试直接调用本方法驱动整场战斗，不再反射撬私有成员。</summary>
+        public void TickOnce(float dt)
+        {
             _battleTime += dt;
             TickCombat(dt);
             CheckEndConditions();
