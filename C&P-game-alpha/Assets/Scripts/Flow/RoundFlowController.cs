@@ -85,7 +85,18 @@ namespace CnP.Flow
             if (played.Kind == PatternKind.FullHouse) FullHouseBuffPending = true;
 
             RoundsUsed++;
+
+            // ISSUE-005 修复：成功出牌此前无任何播报（炸弹 4 张换 1 个单位尤其无感），
+            // 播报牌型与召唤明细，让"打出去"有明确反馈
+            var desc = new System.Text.StringBuilder(played.DisplayName).Append("：召唤 ");
+            for (int i = 0; i < batches.Count; i++)
+            {
+                if (i > 0) desc.Append(" + ");
+                desc.Append(batches[i].Template.Name).Append(" ×").Append(batches[i].Count);
+            }
+            if (played.Kind == PatternKind.FullHouse) desc.Append("（全体护甲 +2，开战生效）");
             FlowEvents.RaisePatternPlayed(played, totalCount);
+            FlowEvents.RaiseToast(desc.ToString());
             return true;
         }
 
