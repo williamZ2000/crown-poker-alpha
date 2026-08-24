@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using CnP.Core;
 using CnP.Domain.Card;
 using CnP.Domain.Unit;
@@ -31,16 +32,26 @@ namespace CnP.Flow
             Instance = this;
         }
 
-        /// <summary>开始新一回合（关卡 1-1）：重置全部状态 → 抽起手 13 张 → 出牌阶段</summary>
+        /// <summary>开始新一回合（关卡 1-1）：重置全部状态 → 抽起手 13 张 → 预算生成敌军 → 出牌阶段</summary>
         public void StartNewRound()
         {
             Board.Clear();
             Cards.StartNewRound();
             RoundsUsed = 0;
             FullHouseBuffPending = false;
+
+            // 敌军预算生成（#D34：B = B₀×E×回合系数；关卡 1 回合 1 = 250 CP）
+            // 出牌阶段即可见，玩家可针对性布阵（2026-08-24 方案约定，可改到开战时生成）
+            var army = new Domain.Enemy.EnemyArmyGenerator().Generate(level: 1, round: 1);
+            Board.SpawnEnemyArmy(army);
+            EnemyArmyCp = army.Sum(u => Domain.Combat.CombatPower.Cp(u));
+
             SetPhase(Phase.Play);
-            FlowEvents.RaiseToast("关卡 1-1 · 出牌阶段：点选手牌凑牌型，随时可开战");
+            FlowEvents.RaiseToast("关卡 1-1 · 天灵军 " + army.Count + " 个单位来袭（战力 " + EnemyArmyCp.ToString("0") + "）—— 出牌布阵，随时开战");
         }
+
+        /// <summary>本回合敌军总战力（生成时记录，供显示/校验）</summary>
+        public float EnemyArmyCp { get; private set; }
 
         /// <summary>出牌：判定 → 校验部署上限 → 召唤（消耗 1 轮）</summary>
         public bool TryPlayCurrentPattern()

@@ -76,8 +76,10 @@ namespace CnP.UI
                              : flow.Phase == Phase.Battle ? "战斗阶段"
                              : "结算阶段";
             GUI.Label(new Rect(14f, 10f, 300f, 22f), "关卡 1-1 · 第 1/1 回合 · " + phaseName, _barStyle);
-            GUI.Label(new Rect(Screen.width - 330f, 10f, 316f, 22f),
-                "部署 " + flow.Board.PlayerUnitCount + "/" + GameParams.DeployLimit +
+            GUI.Label(new Rect(Screen.width - 430f, 10f, 416f, 22f),
+                "敌军 " + flow.Board.EnemyUnitCount +
+                "（战力 " + flow.EnemyArmyCp.ToString("0") + "）   " +
+                "我方 " + flow.Board.PlayerUnitCount + "/" + GameParams.DeployLimit +
                 "   轮次剩 " + flow.RoundsLeft +
                 "   弃牌剩 " + flow.Cards.DiscardsLeft, _barStyle);
 

@@ -89,6 +89,17 @@ namespace CnP.Core
             return Mathf_Pow(1.5f, level - 1);
         }
 
+        /// <summary>关内回合系数（R1=1.0 / R2=1.5 / R3=2.5，§10.3.3）</summary>
+        public static float RoundCoefficient(int round)
+        {
+            switch (round)
+            {
+                case 1: return RoundCoeffR1;
+                case 2: return RoundCoeffR2;
+                default: return RoundCoeffR3;
+            }
+        }
+
         // Domain 层不引用 UnityEngine，用托管实现 pow（底数固定，整数指数）
         private static float Mathf_Pow(float baseValue, int exponent)
         {

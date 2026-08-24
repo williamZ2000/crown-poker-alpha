@@ -55,7 +55,7 @@ namespace CnP.Flow
             return spawned;
         }
 
-        /// <summary>生成敌方单位（S5 敌军生成器调用，按指定纵队排布）</summary>
+        /// <summary>生成敌方单位（按指定纵队排布）</summary>
         public UnitInstance SpawnEnemyUnit(UnitStats stats, Vector2 position)
         {
             var inst = new UnitInstance
@@ -70,6 +70,47 @@ namespace CnP.Flow
             _units.Add(inst);
             FlowEvents.RaiseBoardChanged();
             return inst;
+        }
+
+        // ── 敌军整队部署（S5 预算生成配套）──────────────
+
+        // 敌方车道 X（镜像玩家：坦克靠中线、战士居中、射手/辅助靠后）
+        const float EnemyLaneTank = 2.1f;
+        const float EnemyLaneWarrior = 4.4f;
+        const float EnemyLaneBack = 6.7f;
+
+        /// <summary>按职能车道镜像部署整支敌军（与玩家自动入位同构，逐单位钳制敌方半场）</summary>
+        public List<UnitInstance> SpawnEnemyArmy(List<UnitStats> army)
+        {
+            var laneCounters = new Dictionary<UnitRole, int>();
+            var spawned = new List<UnitInstance>();
+            foreach (var stats in army)
+            {
+                int index = laneCounters.TryGetValue(stats.Role, out var c) ? c : 0;
+                laneCounters[stats.Role] = index + 1;
+
+                float laneX = stats.Role == UnitRole.坦克 ? EnemyLaneTank
+                            : stats.Role == UnitRole.战士 ? EnemyLaneWarrior
+                            : EnemyLaneBack;
+                int row = index / 7;
+                float y = -2.6f + (index % 7) * 0.87f;
+                float x = laneX + row * 0.95f;
+
+                spawned.Add(SpawnEnemyUnit(stats, new Vector2(x, y)));
+            }
+            return spawned;
+        }
+
+        /// <summary>敌方存活单位数（HUD/终局显示用）</summary>
+        public int EnemyUnitCount
+        {
+            get
+            {
+                int n = 0;
+                foreach (var u in _units)
+                    if (u.Side == Side.Enemy && u.Alive) n++;
+                return n;
+            }
         }
 
         /// <summary>移动己方单位（钳制玩家半场）</summary>
