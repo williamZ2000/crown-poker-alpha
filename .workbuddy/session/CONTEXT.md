@@ -10,7 +10,8 @@
 
 ## 项目状况
 
-- Unity 2D URP 项目 `C&P-game-alpha/`，代码 `Assets/Scripts/`（Core/Domain/Flow/UI 四层 + Tests，45 例 EditMode 单测全绿；Domain asmdef 无引擎依赖）
+- Unity 2D URP 项目 `C&P-game-alpha/`，代码 `Assets/Scripts/`（Core/Domain/Flow/UI 四层 + Tests，46 例 EditMode 单测全绿；Domain asmdef 无引擎依赖）
+- **技术债台账已立**（issue-log，TD-001~007 带触发条件）：TD-002 字符串键 / TD-004 战斗测试接缝 已还；**TD-001 生成索引在跨回合留存动工前必须先还**
 - **已可玩链路**：标题 → 抽 13 张 → 出牌判定召唤（6 家族+三带二+A 两用 #D38）→ 弃牌换抽 → RTS 手动布阵（框选/双击同类/Shift 增减选/Ctrl+A/右键整组保阵型移动/Shift+右键线列拖拽+折行+Esc）→ 开战 → 自动战斗（索敌/移动/LoL 公式/血条/180s+10s 时限）→ 胜负结算面板
 - **S5 敌军已接入（#D34）**：开局即按预算 B=B₀(250)×E×回合系数生成天灵 T1 军（约 9-11 个，CP≈240），出牌阶段可见可针对性布阵（生成时机为 2026-08-24 方案约定，可改开战时）；轻护栏至少 1 近战+1 远程；HUD 显示敌军数/总战力
 - 平衡快照（1-1 R1）：满手牌贪心 4 轮出牌两局全胜（35s 存活 2 / 20s 存活 7）；5 个裸近战对 250CP 敌军团灭合理（劣势局）
