@@ -73,6 +73,7 @@
 
 ## 注意事项/阻塞
 
+- ☁️ **云端备份已建立（2026-08-24）**：`git@github.com:williamZ2000/crown-poker-alpha.git`（私有，SSH 走 ssh.github.com:443 通道——github.com 的 https 443 被网络拦截，SSH 备用口可达；密钥 `~/.ssh/id_ed25519`，配置在 `~/.ssh/config`）。**收工仪式：commit 后必须 `git push`**
 - 🟢 **下一步候选（待张总指令）**：S6 打磨 / S6.1 换牌交互重构（#D39）/ 布阵手感返修 / 扩展新范围（商店/多关/留存）——**新范围动工前先查 issue-log 技术债台账触发条件（TD-001 留存前必还）**
 - 🐛 **M1 试玩反馈全部已修**：ISSUE-001~004（commit 5985e81）、ISSUE-005 出牌无反馈（062c9a6）、ISSUE-006 棋盘被裁（04bb723）；详见 `docs/dev/issue-log.md`
 - 📋 **技术债台账（issue-log）**：TD-001 生成索引（留存前必还）/ TD-002 已还 / TD-003 静态事件泄漏模式（新 UI 订阅自查退订）/ TD-004 已还 / TD-005 相机所有权已兜底 / TD-006 UI 魔法数字（S6 一并）/ TD-007 间距常量重叠

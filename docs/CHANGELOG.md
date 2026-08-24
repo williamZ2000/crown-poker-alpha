@@ -2,6 +2,7 @@
 
 ## 2026-08-24
 
+- **云端备份建立（张总提议）**：GitHub 私有库 `williamZ2000/crown-poker-alpha`；网络排查（github.com https 443 被拦、ssh.github.com:443 与 api.github.com 可达）→ SSH ed25519 密钥 + `~/.ssh/config` 443 通道方案；首次推送成功（8b8a7b9，本地远端零偏差）；收工仪式新增"commit 后必 push"；iCloud 方案否决（非 git 服务、同步有损坏仓库风险）
 - **架构评审落盘：技术债台账 + 偿还两笔**
   - issue-log 新增「技术债台账」TD-001~007：隐性债带**触发条件**登记（如 TD-001 生成索引须在跨回合留存动工前先还），不做无谓提前重构
   - 还 TD-002：`RoleSourceMap` 编译期职能映射，替代 `RoleSources[enum.ToString()]`/`Enum.Parse` 字符串互转（拼写错误从运行时炸提前到编译期+单测），UnitFactory/Tier1Pool 已改造
