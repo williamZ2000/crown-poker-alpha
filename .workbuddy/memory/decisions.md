@@ -656,3 +656,16 @@
 **状态**: 已决策待实施——实施时改 PokerHandEvaluator + 单测 + HandView 预览无感知，design.md §2.1.2 牌型判定表加注
 
 **关联文件**: C&P-game-alpha/Assets/Scripts/Domain/Card/PokerHandEvaluator.cs、docs/design/design.md
+
+## #D39 — 2026-08-24: 换牌交互定稿（按钮作用于当前选中牌）+ 术语统一"弃牌"→"换牌"——M1 原型试玩反馈
+
+**背景**: 张总试玩反馈：换牌操作须先点"弃牌"按钮进入弃牌模式、再点目标牌才生效；先选牌再点按钮则无效——与出牌按钮（作用于当前选中牌）的心智模型不一致，操作别扭。另：#D37 起设计文档已统一用"换牌"，而代码/UI 层写成了"弃牌"，术语混用造成误导。
+
+**决策**:
+1. **换牌按钮与出牌按钮同构**：直接作用于**当前选中的牌**，取消"先进换牌模式再点牌"的两段式交互（原型实现为 HandView._discardMode，待重构）
+2. **数量约束不变**：每回合 1 次 × 换 1 张（#D37 基础值，可成长）——须恰好选中 1 张才可换，多选时给提示（实现细节可在实施时微调）
+3. **术语统一为"换牌"**：所有 UI 文案与设计描述弃用"弃牌"（弃牌换抽 → 换牌补抽）；历史决策记录（#D09 等）原文保留不改
+
+**状态**: 已决策待实施——实施时改 HandView 交互 + RoundFlowController/CardSystem 接口与 HUD/Toast 文案 + design.md 术语清扫（本条同步完成）
+
+**关联文件**: C&P-game-alpha/Assets/Scripts/UI/HandView.cs、Assets/Scripts/Flow/RoundFlowController.cs、docs/design/design.md §2.1.1
