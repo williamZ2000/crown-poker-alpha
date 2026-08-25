@@ -48,6 +48,7 @@
 | `.workbuddy/tasks/tasks.md` | 任务看板（M0-M5） |
 | `.workbuddy/memory/decisions.md` | 技术决策记录 |
 | `docs/design/design.md` | 游戏设计总纲 |
+| `docs/将领池.md` | 将领条目内容清单（独立活文档，三层结构 #D40；规则在 design.md §4.4.2a，条目在此） |
 | `docs/dev/architecture.md` | 技术架构文档（v1.0 已定稿） |
 | `docs/dev/issue-log.md` | 开发问题记录（技术缺陷四段式；规则类走 decisions.md 不入此） |
 | `docs/trace/doc-code-map.md` | 文档代码映射表 |
