@@ -2,6 +2,10 @@
 
 ## 2026-08-24
 
+- **S6.1 换牌交互重构 + 术语统一交付（#D39 实施）**
+  - 交互：换牌按钮与出牌同构——`RoundFlowController.SwapSelected()` 作用于当前选牌（恰好 1 张，空选/多选 Toast 指引）；HandView 两段式弃牌模式整体删除（ISSUE-002 旧逻辑随之退场）
+  - 术语：代码与 UI 全面"弃牌"→"换牌"（`SwapsLeft`/`SwapAndDraw`/`SwapsPerRound`/HUD"换牌剩"）；与 #D37 设计术语对齐
+  - 验证：46/46 单测全绿；Play 实机五项矩阵（0 选拒绝/2 选拒绝/1 选成功手牌 13→13 旧牌离手选区清空/耗尽拒绝/出牌回归正常）
 - **云端备份建立（张总提议）**：GitHub 私有库 `williamZ2000/crown-poker-alpha`；网络排查（github.com https 443 被拦、ssh.github.com:443 与 api.github.com 可达）→ SSH ed25519 密钥 + `~/.ssh/config` 443 通道方案；首次推送成功（8b8a7b9，本地远端零偏差）；收工仪式新增"commit 后必 push"；iCloud 方案否决（非 git 服务、同步有损坏仓库风险）
 - **架构评审落盘：技术债台账 + 偿还两笔**
   - issue-log 新增「技术债台账」TD-001~007：隐性债带**触发条件**登记（如 TD-001 生成索引须在跨回合留存动工前先还），不做无谓提前重构

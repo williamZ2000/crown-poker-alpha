@@ -100,18 +100,26 @@ namespace CnP.Flow
             return true;
         }
 
-        /// <summary>弃牌换抽（出牌阶段内随时，1 次 × 1 张）</summary>
-        public bool DiscardCard(CardModel card)
+        /// <summary>换牌（#D39 定稿：与出牌按钮同构——作用于当前选中牌，恰好 1 张；
+        /// 出牌阶段内随时，每回合 1 次 × 1 张）</summary>
+        public bool SwapSelected()
         {
             if (Phase != Phase.Play) return false;
-            if (Cards.DiscardsLeft <= 0)
+            if (Cards.SwapsLeft <= 0)
             {
-                FlowEvents.RaiseToast("本回合弃牌次数已用完");
+                FlowEvents.RaiseToast("本回合换牌次数已用完");
                 return false;
             }
-            if (Cards.DiscardAndDraw(card))
+            if (Cards.Selection.Count != 1)
             {
-                FlowEvents.RaiseToast("弃 1 张，补抽 1 张");
+                FlowEvents.RaiseToast(Cards.Selection.Count == 0
+                    ? "先选中要换掉的牌，再点「换牌」"
+                    : "换牌一次只换 1 张（当前选中 " + Cards.Selection.Count + " 张）");
+                return false;
+            }
+            if (Cards.SwapAndDraw(Cards.Selection[0]))
+            {
+                FlowEvents.RaiseToast("换牌：弃 1 张，补抽 1 张");
                 return true;
             }
             return false;

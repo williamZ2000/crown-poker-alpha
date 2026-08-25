@@ -81,7 +81,7 @@ namespace CnP.UI
                 "（战力 " + flow.EnemyArmyCp.ToString("0") + "）   " +
                 "我方 " + flow.Board.PlayerUnitCount + "/" + GameParams.DeployLimit +
                 "   轮次剩 " + flow.RoundsLeft +
-                "   弃牌剩 " + flow.Cards.DiscardsLeft, _barStyle);
+                "   换牌剩 " + flow.Cards.SwapsLeft, _barStyle);
 
             // 战斗中计时
             if (flow.Phase == Phase.Battle && CombatSystem.Instance != null)

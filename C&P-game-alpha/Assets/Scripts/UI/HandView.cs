@@ -7,12 +7,10 @@ using UnityEngine;
 namespace CnP.UI
 {
     /// <summary>
-    /// 手牌交互（IMGUI）：点选/框选牌 → 牌型预览 → 出牌召唤；弃牌换抽；开战。
+    /// 手牌交互（IMGUI）：点选牌 → 牌型预览 → 出牌召唤；换牌（#D39：与出牌同构，作用于当前选牌）；开战。
     /// </summary>
     public class HandView : MonoBehaviour
     {
-        bool _discardMode;
-
         GUIStyle _cardStyle;
         GUIStyle _cardStyleSelected;
         GUIStyle _previewStyle;
@@ -88,16 +86,7 @@ namespace CnP.UI
 
                 if (GUI.Button(rect, card.Display, style))
                 {
-                    if (_discardMode && flow.Cards.DiscardsLeft > 0)
-                    {
-                        flow.DiscardCard(card);
-                        // ISSUE-002 修复：弃牌次数耗尽自动退出弃牌模式，避免点牌永远走弃牌分支
-                        if (flow.Cards.DiscardsLeft <= 0) _discardMode = false;
-                    }
-                    else
-                    {
-                        flow.Cards.ToggleSelect(card);
-                    }
+                    flow.Cards.ToggleSelect(card);
                 }
                 style.normal.textColor = prevColor;
                 GUI.backgroundColor = prevBg;
@@ -117,17 +106,18 @@ namespace CnP.UI
                 flow.TryPlayCurrentPattern();
             GUI.enabled = prev;
 
-            var discardLabel = flow.Cards.DiscardsLeft > 0
-                ? (_discardMode ? "弃牌中：点一张牌（取消）" : "弃牌换抽 ×" + flow.Cards.DiscardsLeft)
-                : "弃牌已用完";
-            GUI.enabled = flow.Cards.DiscardsLeft > 0;
-            if (GUI.Button(new Rect(cx - 118f, btnY, 210f, 34f), discardLabel))
-                _discardMode = !_discardMode;
+            // 换牌按钮（#D39：与出牌同构——作用于当前选中牌，恰好 1 张；次数可用时可点，
+            // 选牌数不符由 SwapSelected 弹 Toast 指引）
+            var swapLabel = flow.Cards.SwapsLeft > 0
+                ? "换 牌（剩 " + flow.Cards.SwapsLeft + "）"
+                : "换牌已用完";
+            GUI.enabled = flow.Cards.SwapsLeft > 0;
+            if (GUI.Button(new Rect(cx - 118f, btnY, 210f, 34f), swapLabel))
+                flow.SwapSelected();
             GUI.enabled = prev;
 
             if (GUI.Button(new Rect(cx + 106f, btnY, 150f, 34f), "开 战"))
             {
-                _discardMode = false;
                 flow.RequestStartBattle();
             }
         }

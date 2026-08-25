@@ -12,8 +12,8 @@ namespace CnP.Core
         public const int HandStart = 13;      // 起手抽牌数
         public const int HandMax = 13;        // 手牌上限
         public const int PlayRoundsBase = 4;  // 出牌轮次基础值
-        public const int DiscardsPerRound = 1; // 每回合弃牌次数
-        public const int DiscardSize = 1;     // 每次弃牌张数
+        public const int SwapsPerRound = 1; // 每回合换牌次数（#D37：1 次 × 1 张）
+        public const int SwapSize = 1;     // 每次换牌换掉的张数
 
         // ── 部署（#D14）────────────────────────────────
         public const int DeployLimit = 36;    // 棋盘部署上限（含英雄/将领/棋子）

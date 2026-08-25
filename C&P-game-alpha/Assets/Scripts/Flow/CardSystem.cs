@@ -6,7 +6,7 @@ using CnP.Domain.Card;
 namespace CnP.Flow
 {
     /// <summary>
-    /// 卡牌系统：牌堆/手牌/选牌/弃牌换抽（#D37：换牌 1 次 × 1 张）。
+    /// 卡牌系统：牌堆/手牌/选牌/换牌补抽（#D37：换牌 1 次 × 1 张；#D39：换牌作用于当前选牌）。
     /// </summary>
     public class CardSystem
     {
@@ -16,15 +16,15 @@ namespace CnP.Flow
         readonly List<CardModel> _selection = new List<CardModel>();
         public IReadOnlyList<CardModel> Selection => _selection;
 
-        /// <summary>剩余弃牌次数</summary>
-        public int DiscardsLeft { get; private set; } = GameParams.DiscardsPerRound;
+        /// <summary>剩余换牌次数</summary>
+        public int SwapsLeft { get; private set; } = GameParams.SwapsPerRound;
 
         public void StartNewRound()
         {
             Deck = new DeckModel();
             Hand = new HandModel();
             _selection.Clear();
-            DiscardsLeft = GameParams.DiscardsPerRound;
+            SwapsLeft = GameParams.SwapsPerRound;
             // 抽牌阶段（自动）：起手补满
             Hand.AddRange(Deck.Draw(GameParams.HandStart));
         }
@@ -58,16 +58,16 @@ namespace CnP.Flow
             return true;
         }
 
-        /// <summary>弃一张牌并补抽一张（#D37：1 次 × 1 张）</summary>
-        public bool DiscardAndDraw(CardModel card)
+        /// <summary>换一张牌并补抽（#D37：1 次 × 1 张；换掉的牌进弃牌堆）</summary>
+        public bool SwapAndDraw(CardModel card)
         {
-            if (DiscardsLeft <= 0) return false;
+            if (SwapsLeft <= 0) return false;
             if (!Hand.RemoveAll(new[] { card })) return false;
             Deck.AddToDiscard(new[] { card });
-            var drawn = Deck.Draw(GameParams.DiscardSize);
+            var drawn = Deck.Draw(GameParams.SwapSize);
             Hand.AddRange(drawn);
             _selection.Remove(card);
-            DiscardsLeft--;
+            SwapsLeft--;
             FlowEvents.RaiseHandChanged();
             return true;
         }
