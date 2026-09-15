@@ -4,7 +4,7 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="title" value="crown&amp;amp;poker-alpha 架构总览（M1 原型 · 46 单测 · 规则 v2 首图）" style="text;html=1;fontSize=18;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+        <mxCell id="title" value="crown&amp;poker-alpha 架构总览（M1 原型 · 46 单测 · 规则 v2 首图）" style="text;html=1;fontSize=18;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
           <mxGeometry x="80" y="10" width="1260" height="30" as="geometry" />
         </mxCell>
         <mxCell id="bs" value="Bootstrap 组合根 — GameBootstrap.cs（RuntimeInitializeOnLoadMethod：Play 即生成，零编辑器操作）" style="swimlane;startSize=30;rounded=1;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;" vertex="1" parent="1">

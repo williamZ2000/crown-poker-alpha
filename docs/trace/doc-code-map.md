@@ -6,7 +6,8 @@
 > 开发文档 `docs/dev/architecture.md` 已定稿（M0-04，2026-08-07）。
 > **M1 原型开发已获批（2026-08-23，P-01~P-07 七步垂直切片）**，代码文件列自 P-01 起填充。
 
-| 图 | 架构总览（四层+事件流+图即合同坐标） | `docs/diagrams/architecture-overview.drawio` ↔ architecture.md | 2026-09-15 |
+| 图 | 架构总览（依赖视角：四层+调用+事件） | `docs/diagrams/architecture-overview.drawio` ↔ architecture.md | 2026-09-15 |
+| 图 | 回合数据流（数据视角：牌→单位→战斗→事件全旅程 DFD） | `docs/diagrams/data-flow-round.drawio` ↔ architecture.md §3 | 2026-09-15 |
 
 ## 设计文档章节索引
 
