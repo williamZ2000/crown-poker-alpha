@@ -686,3 +686,17 @@
 **状态**: 已决策——结构定稿，条目设计中验证占比
 
 **关联文件**: docs/design/design.md §4.4、docs/design/派系兵种设计.md
+
+## #D41 — 2026-09-15: 项目规则升级 v2（采纳 project-init 新方法论）
+
+**背景**: 张总更新了 project-init 技能（方法论从"协作纪律"升级到"工程管线"），指示本项目同步升级。
+
+**决策**:
+1. PROJECT_RULES.md 升级 v2：新增 §7 六阶段门禁管线（S1~S6，三道门禁：S2 流程图过审/S3 联动修改清单/S5 独立子代理审计）、§8 迭代管理 I0~I2（I0 含 TD 触发核对）、§9 反屎山六条硬规则、§7.3 draw.io 图纪律（含"图即合同"：架构图框必须挂代码坐标）、决策留痕第 6 步（diagrams 同步）
+2. design.md 增设 §0 术语表（19 条已定稿术语，唯一权威命名处；#D39 式改名的制度化解药）
+3. 建 docs/diagrams/（图源入库）；首图 architecture-overview.drawio 挂 architecture.md
+4. 不追溯：六阶段管线从下一个开发 Feature 启用；M1 已完成部分不补课；内容设计走文档级轻量路径
+
+**状态**: 已执行
+
+**关联文件**: PROJECT_RULES.md、docs/design/design.md §0、docs/diagrams/
